@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Filmsystem">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/Filmsystem.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
