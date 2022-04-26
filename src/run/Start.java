@@ -14,13 +14,13 @@ import javafx.stage.Stage;
 public class Start extends Application {
   // ← →
   @Override
-  public void start(Stage stage) throws Exception {    // Stage = Fenster
-    // View laden und zugeordnete Controller-Klasse instanziieren
+  public void start(Stage stage) throws Exception {    // Stage = window
+    // Load view and instantiate associated controller class
     Parent root = FXMLLoader.load(getClass().getResource("FilmCRUD.fxml"));
-    Scene scene = new Scene(root);  // Scene = Inhalt eines Fensters
-    stage.setScene(scene);          // Inhalt ins Fenster packen
+    Scene scene = new Scene(root);  // Scene = content of a window
+    stage.setScene(scene);          // Pack content into window
     stage.setTitle("Welcome");
-    stage.show();                   // Fenster anzeigen
+    stage.show();                   // show window
   }
 
   /**

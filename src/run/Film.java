@@ -4,7 +4,6 @@ package run;
  *
  * @author Surattana Bopp <info@surattana.de>
  */
-import run.*;
 
 public class Film {
 
@@ -20,9 +19,6 @@ public class Film {
   private String url;
 
   // ############### Constructors ###############
-//  public Film_1() {
-//  }
-
   public Film(int filmId, String filmName, String description, String releaseYear, String genre, String runTime, String quality, String provider, String url) {
     this.filmId = filmId;
     this.filmName = filmName;

@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="Filmsystem.jar" size="9467" download="eager" />
+    <jar href="Filmsystem.jar" size="9463" download="eager" />
     <jar href="lib\commons-lang3-3.8.1.jar" size="501879" download="eager" />
     <jar href="lib\controlsfx-8.40.18.jar" size="1436095" download="eager" />
     <jar href="lib\mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />

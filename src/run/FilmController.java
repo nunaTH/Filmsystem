@@ -16,9 +16,8 @@ import java.util.Optional;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.*;
 
-public class FilmController { // In dieser App eine Instanz vom FilmController
-
-  // =================== Formular =====================
+public class FilmController { // In this app, an instance of FilmController
+  // =================== Form =====================
   @FXML
   private TextField filmId_tf;
 
@@ -56,7 +55,7 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
   private FilmService filmService;
 
   // ============================================================
-  // Beim laden der fxml-Datei, wird der FilmController erstellt:
+  // When loading the fxml file, the FilmController is created:
   // 1. Constructor
   // 2. Dependency Injection: @FXML
   // 3. Initialization
@@ -66,12 +65,12 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
   }
 
   /**
-   * Standard-Mechanismus für Initialisierungen
+   * Standard mechanism for initializations
    */
   public void initialize() {
     System.out.println("MainController.initialize() ...");
     filmService = new FilmService();
-    updateGUIFromBookList();
+    updateGUIFromList();
     clearStatusText();
   }
 
@@ -79,16 +78,16 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
     setStatusInfo("");
   }
 
-  private void updateGUIFromBookList() {
+  private void updateGUIFromList() {
     List<Film> filmList = filmService.getList();
     viewList_listview.getItems().setAll(filmList);
   }
 // ============================================================================
   //               MVC: Modell, View, Controller
   // ============================================================================
-  // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
-  // 2. Model aufrufen
-  // 3. View aufrufen (aktualisieren)
+  // 1. Controller: Evaluate user input, convert, validate and form matching objects
+  // 2. Model call
+  // 3. View call (To update)
 
   // ===============================================
   // =            Event Handler                    =
@@ -96,17 +95,13 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
   @FXML
   void onCreate(ActionEvent event) {
     System.out.println("MainController.onCreate()");
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
     Film film = getFromGUI();
     if (film.getFilmName().trim().isEmpty()) {
       setStatusError("A insert is required!");
     } else {
-      // 2. Model aufrufen
-      //    FilmService filmService= new FilmService(); // Programmierfehler, jedes mal eine neue Liste
-      filmService.save(film);
-      // 3. View aufrufen (aktualisieren)
+    filmService.save(film);
       setStatusInfo("Film [" + film.getFilmName() + "] was created.");
-      updateGUIFromBookList(); // BookList von FilmService abholen und in die GUI setzen
+      updateGUIFromList();
     }
   }
 
@@ -122,28 +117,21 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
 
   @FXML
   void fillData(ActionEvent event) {
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
-    // Welche Schaltfläche wurde geklickt? 1, 2 oder 3
-    Button button = (Button) event.getSource(); // Die Schaltfläche, die geklickt wurde
-    String buttonText = button.getText();       // Beschriftung der Schaltfläche
-    // 2. Model aufrufen
-    Film film = filmService.getSampleBook(buttonText);
-    // 3. View aufrufen (aktualisieren)
+    Button button = (Button) event.getSource();
+    String buttonText = button.getText();
+    Film film = filmService.getSample(buttonText);
     setFromGUI(film);
   }
 
   @FXML
   void onUpdate(ActionEvent event) {
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
-    Film selected = getSelected();
-    if (selected != null) { // Ein Film ist ausgewählt
-      // 2. Model aufrufen
-      Film updatedBook = getFromGUI();     // Alle Daten außer id
-      updatedBook.setFilmId(selected.getFilmId()); // Damit hat updatedBook die aktuelle id
+   Film selected = getSelected();
+    if (selected != null) {
+      Film updatedBook = getFromGUI();
+      updatedBook.setFilmId(selected.getFilmId());
       filmService.update(updatedBook);
-      // 3. View aufrufen (aktualisieren)
       setStatusInfo("Film [" + selected.getFilmName() + "] was updated.");
-      updateGUIFromBookList();
+      updateGUIFromList();
     } else {
       setStatusError("Please select a film!");
     }
@@ -151,38 +139,30 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
 
   @FXML
   void onDelete(ActionEvent event) {
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
     Film selected = getSelected();
-    // 2. Model aufrufen
-    if (selected != null) { // Ein Film ausgewählt
+        if (selected != null) {
       if (getConfirmation("The film is irrevocably removed from the list:", "Do you agree?")) {
         filmService.delete(selected);
-        // 3. View aufrufen (aktualisieren)
         setStatusInfo("Film [" + selected.getFilmName() + "] was deleted.");
-        updateGUIFromBookList();
+        updateGUIFromList();
       }
-    } else { // Kein Film ausgewählt
+    } else {
       setStatusError("Please select a film!");
     }
   }
 
   private boolean getConfirmation(String headerText, String contentText) {
-    Alert alert = new Alert(CONFIRMATION); // OK und Abbrechen
+    Alert alert = new Alert(CONFIRMATION);
     alert.setTitle("confirmation");
     alert.setHeaderText(headerText);
     alert.setContentText(contentText);
     Optional<ButtonType> userAction = alert.showAndWait();
-    return userAction.get() == OK; // Benutzer hat "OK" ausgewählt (bestätigt)
+    return userAction.get() == OK;
   }
 
   @FXML
   void onReset(ActionEvent event) {
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
-
-    //  public Film(int filmId, String filmName, String description, String releaseYear, String genre, String period, String quality, String provider, String url) {
-    Film film = new Film(null, "", "", "", "", "", "", "");
-    // 2. Model aufrufen
-    // 3. View aufrufen (aktualisieren)
+    Film film = new Film("", "", "", "", "", "", "", "");
     setFromGUI(film);
     viewList_listview.getSelectionModel().clearSelection();
   }
@@ -190,12 +170,8 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
   @FXML
   void onSelectionChanged(MouseEvent event) {
     System.out.println("MainController.onSelectionChanged() ...");
-    // Ausgewähltes Film abfragen und in Formular setzen
-    // 1. Controller-Aufgaben: Benutzereingabe auswerten, konvertieren, validieren und passende Objekte bilden
     Film selected = getSelected(); // ALT + SHIFT + M => Extract Method
-    // 2. Model aufrufen
-    // 3. View aufrufen (aktualisieren)
-    if (selected != null) {
+   if (selected != null) {
       setFromGUI(selected);
     } else {
       onReset(null);
@@ -210,8 +186,6 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
   // ============= Helper Methods =================
   // ===============================================
   private Film getFromGUI() {
-    //  int filmId = filmId_tf.getText();
- 
     String filmName = filmName_tf.getText();
     String description = description_tf.getText();
     String releaseYear = releaseYear_tf.getText();
@@ -221,7 +195,6 @@ public class FilmController { // In dieser App eine Instanz vom FilmController
     String provider = provider_tf.getText();
     String url = url_tf.getText();
 
-    //  public Film(int filmId, String filmName, String description, String releaseYear, String genre, String period, String quality, String provider, String url) {
     Film film = new Film(filmName, description, releaseYear, genre, runTime, quality, provider, url);
     return film;
   }
